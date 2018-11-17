@@ -1,11 +1,12 @@
 const path = require("path");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const isDev = process.env.NODE_ENV === 'development';
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const ExtractPlugin = require("extract-text-webpack-plugin");
 const baseConfig = require("./webpack.config.base");
+
+const isDev = process.env.NODE_ENV === 'development';
 let config;
 
 let defaultPlugins =  [
@@ -21,12 +22,12 @@ let defaultPlugins =  [
 if (isDev) {
   config = merge(baseConfig, {
     entry: {
-      app: path.join(__dirname, "../src/index.js"),
+      app: path.join(__dirname, "../client/index.js"),
       vendor: ['vue']
     },
     output: {
       filename: '[name].[hash:8].js',
-      path: path.join(__dirname, "dist")
+      path: path.join(__dirname, "../dist")
     },
     devtool: "#cheap-module-eval-source-map",
     devServer: {
@@ -44,7 +45,7 @@ if (isDev) {
         {
           test: /\.styl/,
           use: [
-            'style-loader',
+            'vue-style-loader',
             'css-loader',
             {
               loader: "postcss-loader",
@@ -74,7 +75,7 @@ if (isDev) {
         {
           test: /\.styl/,
           use: ExtractPlugin.extract({
-            fallback: 'style-loader',
+            fallback: 'vue-style-loader',
             use: [
               'css-loader',
               {
